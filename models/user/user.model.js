@@ -3,21 +3,26 @@ const Schema = mongoose.Schema;
 
 
 const UserSchema = Schema({
-    name: String,
+    username: String,
     email: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        lowercase: true
     },
     password:{
         type: String,
         required: true
     },
-    address: String,
+    address:{
+        type: String,
+        required: true
+    },
     role: {
         type: String,
-        enum: ['admin', 'user']
+        enum: ['admin', 'user'],
+        default: 'user'
     }
-});
+  }, { timestamps: true });
 
 module.exports = mongoose.model('User', UserSchema);
