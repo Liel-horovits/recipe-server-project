@@ -1,10 +1,7 @@
 
-
-
-
 const express = require('express');
 const router = express.Router();
-const Category = require('../models/category/category.model');
+const Category = require('../models/category/category'); 
 
 router.get('/', async (req, res) => {
     try {
@@ -15,4 +12,32 @@ router.get('/', async (req, res) => {
     }
 });
 
-module.exports = router; 
+
+router.get('/:code', async (req, res) => {
+    try {
+        const category = await Category.findOne({ code: req.params.code });
+        if (!category) {
+            return res.status(404).json({ error: { message: 'קטגוריה לא נמצאה' } });
+        }
+        res.json(category);
+    } catch (err) {
+        res.status(500).json({ error: { message: err.message } });
+    }
+});
+
+
+router.get('/:code/recipes', async (req, res) => {
+    try {
+        const category = await Category.findOne({ code: req.params.code })
+            .populate('recipes'); 
+            
+        if (!category) {
+            return res.status(404).json({ error: { message: 'קטגוריה לא נמצאה' } });
+        }
+        res.json(category.recipes);
+    } catch (err) {
+        res.status(500).json({ error: { message: err.message } });
+    }
+});
+
+module.exports = router;
