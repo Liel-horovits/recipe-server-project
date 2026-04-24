@@ -74,4 +74,19 @@ router.post('/login', async (req, res) => {
 });
 
 
+const { auth, admin } = require('../middlewares/authMiddleware');
+
+router.get('/all', [auth, admin], async (req, res) => {
+    try {
+        const users = await User.find().select('-password'); 
+        res.json(users);
+    } catch (err) {
+        res.status(500).send('שגיאת שרת');
+    }
+});
+
+
+
+
+
 module.exports = router;
