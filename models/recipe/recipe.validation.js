@@ -15,7 +15,7 @@ const recipeJoiSchema = Joi.object({
     instructions: Joi.array().items(Joi.string()).min(1).required(),
     image: Joi.string().allow(''),
     isPrivate: Joi.boolean().default(false),
-    userOwner: Joi.string().required()
+    userOwner: Joi.string().optional()
 });
 
 module.exports = recipeJoiSchema;

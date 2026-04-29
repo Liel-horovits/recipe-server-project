@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/user/user.model');
 const jwt = require('jsonwebtoken');
 
+
 router.post('/register', async (req, res) => {
-    console.log('--- Register route was hit! ---');
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, address, role } = req.body;
 
         let user = await User.findOne({ email });
         if (user) {
@@ -20,21 +20,21 @@ router.post('/register', async (req, res) => {
         user = new User({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            address, 
+            role: role || 'user' 
         });
 
         await user.save();
-
         res.status(201).json({ message: 'המשתמש נרשם בהצלחה!' });
 
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('שגיאת שרת');
+        console.error("Register Error:", err.message);
+        res.status(500).json({ error: { message: err.message } });
     }
 });
 
 
-console.log('--- Auth Routes are being loaded! ---');
 
 router.post('/login', async (req, res) => {
     console.log('--- Login route was hit! ---');
